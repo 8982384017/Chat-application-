@@ -26,7 +26,65 @@ const register = async(req,res) => {
         console.log(err.message);
     }
 }
+
+const loadLogin = async(req, res) => {
+    try{
+        res.render('login')
+
+    }catch(error) {
+        console.log(error);
+        
+    }
+}
+const login = async(req, res) => {
+    try{
+        const email = req.body.email;
+        const password = req.body.password;
+
+        const userData = await User.findOne({email:email});
+        if(userData){
+            const passwordMatch = await bcrypt.compare(password,userData.password);
+            if(passwordMatch){
+                req.session.user = userData;
+                res.redirect('/dashboard');
+            }
+            else{
+                res.render('login',{message:'Email and Password is Incorrect!'});
+            }
+        }else{
+            res.render('login',{message:'Email and Password is Incorrect!'});
+        }
+
+    }catch(error) {
+        console.log(error);
+        
+    }
+}
+const logout = async(req, res) => {
+    try{
+        req.session.destroy();
+        res.redirect('/');
+
+    }catch(error) {
+        console.log(error);
+        
+    }
+}
+const loadDashboard = async(req, res) => {
+    try{
+        res.render('dashboard',{user: req.session.user});
+
+    }catch(error) {
+        console.log(error);
+        
+    }
+}
+
 module.exports = {
     registerLoad,
-    register
+    register,
+    loadLogin,
+    login,
+    logout,
+    loadDashboard
 }
