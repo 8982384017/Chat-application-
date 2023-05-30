@@ -18,11 +18,17 @@ usp.on('connection',async function(socket){
 
     await User.findByIdAndUpdate({_id: userId},{$set:{is_online:"1"}});
 
+    //broadcasting that user is online 
+    socket.broadcast.emit('getOnlineUser',{user_id:userId});
+
     socket.on('disconnect', async   function(){
         console.log('user Disconnected');
 
         var userId = socket.handshake.auth.token;
         await User.findByIdAndUpdate({_id: userId},{$set:{is_online:"0"}});
+
+        //broadcasting that user is offline 
+        socket.broadcast.emit('getOfflineUser',{user_id:userId});
     });
 });
 
