@@ -11,11 +11,9 @@ user_route.use(
         saveUninitialized: false,
     })
 );
-// user_route.use(session({secret:SESSION_SECRET}));
 
 user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({extended:true}));
-
 user_route.set('view engine','ejs');
 user_route.set('views','./views');
 user_route.use(express.static('public'));
@@ -41,12 +39,12 @@ const auth =  require('../middlewares/auth');
 
 user_route.get('/register',auth.isLogout,userController.registerLoad);
 user_route.post('/register',upload.single('image'),userController.register);
-
 user_route.get('/',auth.isLogout, userController.loadLogin);
 user_route.post('/', userController.login);
 user_route.get('/logout',auth.isLogin,userController.logout);
 user_route.get('/dashboard',auth.isLogin,userController.loadDashboard);
 user_route.post('/save-chat',userController.saveChat);
+user_route.post('/delete-chat',userController.deleteChat);
 
 user_route.get("*",function(req,res) {
     res.redirect('/');

@@ -97,6 +97,15 @@ const saveChat = async (req,res) => {
     }
 }
 
+const deleteChat = async (req,res) => {
+    try {
+        await Chat.deleteOne({_id:req.body.id});
+        res.status(200).send({success:true});
+    } catch (error) {
+        res.status(400).send({success:false,msg:error.message});
+    }
+}
+
 module.exports = {
     registerLoad,
     register,
@@ -104,5 +113,6 @@ module.exports = {
     login,
     logout,
     loadDashboard,
-    saveChat
+    saveChat,
+    deleteChat
 }
