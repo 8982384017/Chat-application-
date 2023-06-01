@@ -30,6 +30,11 @@ usp.on('connection',async function(socket){
         //broadcasting that user is offline 
         socket.broadcast.emit('getOfflineUser',{user_id:userId});
     });
+
+    //chatting implementation
+    socket.on('newChat',function(data){
+        socket.broadcast.emit('loadNewChat',data);
+    })
 });
 
 http.listen(5000, (err) => {
