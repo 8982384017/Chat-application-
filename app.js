@@ -51,8 +51,14 @@ usp.on('connection',async function(socket){
     socket.on('chatDeleted',function(id){
         socket.broadcast.emit('chatMessageDeleted',id);
     })
+    
+    //update chats
+    socket.on('chatUpdated',function(data){
+        socket.broadcast.emit('chatMessageUpdated',data);
+    })
 });
 
 http.listen(5000, (err) => {
     console.log("Server Started");
 })
+  

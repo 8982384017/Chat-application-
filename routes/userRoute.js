@@ -18,10 +18,10 @@ user_route.set('view engine','ejs');
 user_route.set('views','./views');
 user_route.use(express.static('public'));
 const storage = multer.diskStorage({
-    destination: function(req,file,cb){
+    destination: function(cb){
         cb(null,path.join(__dirname,'../public/image'));
     },
-    filename:function(req,file,cb){
+    filename:function(file,cb){
         const name = Date.now()+'-'+file.originalname;
         cb(null,name);
     }
@@ -37,6 +37,7 @@ user_route.get('/logout',auth.isLogin,userController.logout);
 user_route.get('/dashboard',auth.isLogin,userController.loadDashboard);
 user_route.post('/save-chat',userController.saveChat);
 user_route.post('/delete-chat',userController.deleteChat);
+user_route.post('/update-chat',userController.updateChat);
 user_route.get("*",function(req,res) {
     res.redirect('/');
 })
